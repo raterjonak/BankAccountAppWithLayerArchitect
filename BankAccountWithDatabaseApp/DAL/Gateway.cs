@@ -15,7 +15,7 @@ namespace BankAccountWithDatabaseApp.DAL
 
         public int Save(Account anAccount)
         {
-            string query = "INSERT INTO tbl_Account_Info VALUES ('" + anAccount.CustomerName + "', '" + anAccount.AccountNumber + "', '" +anAccount.Email +"', '" + anAccount.OpeningDate + "', '" + anAccount.Balance + "')";
+            string query = "INSERT INTO tbl_Account_Info VALUES ('" + anAccount.AccountNumber + "', '" + anAccount.CustomerName + "', '" +anAccount.Email +"', '" + anAccount.OpeningDate + "', '" + anAccount.Balance + "')";
             SqlConnection connection = new SqlConnection(connectionString);
             SqlCommand command = new SqlCommand(query, connection);
             connection.Open();
@@ -69,6 +69,32 @@ namespace BankAccountWithDatabaseApp.DAL
         {
             SqlConnection connection = new SqlConnection(connectionString);
             string query = "SELECT AccountNumber,customerName,openingDate,balanch FROM tbl_Account_Info";
+            SqlCommand command = new SqlCommand(query, connection);
+
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            List<Account> accountList = new List<Account>();
+            while (reader.Read())
+            {
+                Account account = new Account();
+                account.AccountNumber = reader["AccountNumber"].ToString();
+                account.CustomerName = reader["customerName"].ToString();
+                account.OpeningDate = reader["openingDate"].ToString();
+                account.Balance = decimal.Parse(reader["balanch"].ToString());
+                //account.Email = reader["email"].ToString();
+
+                accountList.Add(account);
+            }
+
+            reader.Close();
+            connection.Close();
+
+            return accountList;
+        }
+        public List<Account> ShowSearchAccountInfo(string acNumber)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            string query = "SELECT AccountNumber,customerName,openingDate,balanch FROM tbl_Account_Info Where AccountNumber like '"+acNumber+"%'";
             SqlCommand command = new SqlCommand(query, connection);
 
             connection.Open();

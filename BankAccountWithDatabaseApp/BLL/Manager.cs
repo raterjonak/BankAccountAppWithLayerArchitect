@@ -36,7 +36,7 @@ namespace BankAccountWithDatabaseApp.BLL
         public string Deposit(string accountNo,decimal amount)
         {
             decimal balane = gateway.GetBalanceByAccountNumber(accountNo);
-            balane += amount;
+            
             int value=gateway.UpdateBalance(accountNo,balane);
 
             if (amount>0)
@@ -46,6 +46,7 @@ namespace BankAccountWithDatabaseApp.BLL
 
             if (value>0)
             {
+                balane += amount;
                 return "Deposite successful";
             }
             else
@@ -98,6 +99,11 @@ namespace BankAccountWithDatabaseApp.BLL
         {
             return gateway.ShowAllAccountInfo();
         }
+
+        public List<Account> LoadSearchesAccountInfo(string accountNo)
+        {
+            return gateway.ShowSearchAccountInfo(accountNo);
+        } 
 
     }
 }

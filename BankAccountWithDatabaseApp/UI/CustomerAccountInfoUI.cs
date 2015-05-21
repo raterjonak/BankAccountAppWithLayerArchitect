@@ -70,5 +70,24 @@ namespace BankAccountWithDatabaseApp.UI
         {
             LoadAccountInfo();
         }
+
+        private void searchButton_Click(object sender, System.EventArgs e)
+        {
+            string searchAccountNo = accountNumberToSearchTextBox.Text;
+            List<Account> accounts = manager.LoadSearchesAccountInfo(searchAccountNo);
+            showInfoListView.Items.Clear();
+            foreach (var account in accounts)
+            {
+                ListViewItem item = new ListViewItem(account.AccountNumber.ToString());
+                item.SubItems.Add(account.CustomerName);
+                // item.SubItems.Add(account.email);
+                item.SubItems.Add(account.OpeningDate);
+                item.SubItems.Add(account.Balance.ToString());
+
+
+                showInfoListView.Items.Add(item);
+
+            }
+        }
     }
 }
